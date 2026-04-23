@@ -1,0 +1,42 @@
+/* App.css — versión Tailwind
+   Solo conservamos lo que Tailwind no puede hacer:
+   custom fonts, CSS variables globales y keyframes complejos
+*/
+
+/* Fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700&display=swap');
+
+/* CSS variables globales (para componentes que las necesiten) */
+:root {
+  --accent-blue: #0066cc;
+  --accent-blue-hover: #0052a3;
+  --accent-red: #ff0000;
+}
+
+/* Reset mínimo */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.7;
+}
+
+/* Clases de utilidad que Tailwind no genera por defecto */
+.font-orbitron {
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* Animaciones globales */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes pulse-badge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}

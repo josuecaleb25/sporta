@@ -1,0 +1,223 @@
+.contact-page {
+  min-height: 80vh;
+  padding: 2rem 1rem;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+/* Modo oscuro para el fondo de la página */
+@media (prefers-color-scheme: dark) {
+  .contact-page {
+    background-color: #1a1a1a;
+  }
+}
+
+.contact-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Modo oscuro para el contenedor del formulario */
+@media (prefers-color-scheme: dark) {
+  .contact-container {
+    background: #2d2d2d;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.contact-container h1 {
+  text-align: center;
+  color: #000;
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  transition: color 0.3s ease;
+}
+
+.contact-container p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+/* Modo oscuro para textos */
+@media (prefers-color-scheme: dark) {
+  .contact-container h1 {
+    color: #ffffff;
+  }
+  
+  .contact-container p {
+    color: #b0b0b0;
+  }
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+/* Modo oscuro para labels */
+@media (prefers-color-scheme: dark) {
+  .form-label {
+    color: #e0e0e0;
+  }
+}
+
+.form-input, .form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e1e1e1;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background-color: #fff;
+  color: #333;
+}
+
+.form-input:focus, .form-textarea:focus {
+  outline: none;
+  border-color: #000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Modo oscuro para inputs */
+@media (prefers-color-scheme: dark) {
+  .form-input, .form-textarea {
+    background-color: #3d3d3d;
+    border-color: #555;
+    color: #ffffff;
+  }
+  
+  .form-input:focus, .form-textarea:focus {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+  }
+  
+  .form-input::placeholder, .form-textarea::placeholder {
+    color: #999;
+  }
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.submit-btn {
+  background-color: #000;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background-color: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Modo oscuro para botón */
+@media (prefers-color-scheme: dark) {
+  .submit-btn {
+    background-color: #ffffff;
+    color: #000;
+  }
+  
+  .submit-btn:hover:not(:disabled) {
+    background-color: #e0e0e0;
+  }
+}
+
+.success-message {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 2rem auto;
+  transition: all 0.3s ease;
+}
+
+.success-message h2 {
+  color: #000;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  transition: color 0.3s ease;
+}
+
+.success-message p {
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+/* Modo oscuro para mensaje de éxito */
+@media (prefers-color-scheme: dark) {
+  .success-message {
+    background: #2d2d2d;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .success-message h2 {
+    color: #ffffff;
+  }
+  
+  .success-message p {
+    color: #b0b0b0;
+  }
+}
+
+.error-message {
+  color: #d32f2f;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .contact-container h1 {
+    font-size: 2rem;
+  }
+}

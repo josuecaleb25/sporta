@@ -12,6 +12,7 @@ const Checkout = ({ cart, getTotalPrice, onReturnToCart, onOrderComplete, user }
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState('');
   const [formState, setFormState] = useState({ submitting: false, succeeded: false, error: null });
+  const [orderTotal, setOrderTotal] = useState(0); // Guardar el total del pedido
 
   const [customerInfo, setCustomerInfo] = useState({
     name: '', email: '', phone: '', address: '', district: '', reference: '', deliveryNotes: ''
@@ -77,7 +78,7 @@ const Checkout = ({ cart, getTotalPrice, onReturnToCart, onOrderComplete, user }
   const generateReceipt = () => ({
     receiptNumber: `COMP-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
     receiptDate: new Date().toLocaleDateString('es-PE'),
-    receiptAmount: getTotalPrice ? getTotalPrice().toFixed(2) : '0.00',
+    receiptAmount: orderTotal > 0 ? orderTotal.toFixed(2) : (getTotalPrice ? getTotalPrice().toFixed(2) : '0.00'),
     bankName: selectedPayment === 'yape' ? 'Yape' :
               selectedPayment === 'transfer' ? 'Transferencia Bancaria' :
               selectedPayment === 'credit' ? 'Tarjeta de Crédito/Débito' : 'Efectivo',
@@ -108,6 +109,10 @@ const Checkout = ({ cart, getTotalPrice, onReturnToCart, onOrderComplete, user }
     setIsProcessing(true); 
     setFormState({ submitting: true, succeeded: false, error: null });
     setFormError('');
+    
+    // Guardar el total antes de procesar
+    const currentTotal = getTotalPrice ? getTotalPrice() : 0;
+    setOrderTotal(currentTotal);
     
     try {
       const r = generateReceipt();

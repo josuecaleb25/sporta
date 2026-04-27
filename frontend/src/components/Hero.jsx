@@ -6,11 +6,11 @@ const Hero = () => {
   const carouselRef = useRef(null)
 
   const models = [
-    { id: 1, name: "Air Sprint Pro", category: "Running", image: "/src/assets/modelo1.png" },
-    { id: 2, name: "Urban Pulse", category: "Lifestyle", image: "/src/assets/modelo2.png" },
-    { id: 3, name: "Classic Strike", category: "Originals", image: "/src/assets/modelo3.png" },
-    { id: 4, name: "Court Force", category: "Basketball", image: "/src/assets/modelo4.png" },
-    { id: 5, name: "Retro Blaze", category: "Retro", image: "/src/assets/modelo5.png" },
+    { id: 1, name: "Air Sprint Pro", category: "Running", image: "/modelo1.png" },
+    { id: 2, name: "Urban Pulse", category: "Lifestyle", image: "/modelo2.png" },
+    { id: 3, name: "Classic Strike", category: "Originals", image: "/modelo3.png" },
+    { id: 4, name: "Court Force", category: "Basketball", image: "/modelo4.png" },
+    { id: 5, name: "Retro Blaze", category: "Retro", image: "/modelo5.png" },
   ]
 
   useEffect(() => {

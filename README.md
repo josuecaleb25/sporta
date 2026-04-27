@@ -1,437 +1,528 @@
-# 🏃‍♂️ SPORTA - E-commerce de Equipamiento Deportivo
+# 🏃‍♂️ SPORTA E-Commerce Platform
 
-<div align="center">
-  <img src="./public/sporta.svg" alt="Sporta Logo" width="120"/>
-  
-  ### Plataforma moderna de venta de equipamiento deportivo premium
-  
-  [![React](https://img.shields.io/badge/React-19.1.1-61DAFB?style=flat&logo=react)](https://reactjs.org/)
-  [![Vite](https://img.shields.io/badge/Vite-7.1.7-646CFF?style=flat&logo=vite)](https://vitejs.dev/)
-  [![TailwindCSS](https://img.shields.io/badge/Tailwind-4.2.4-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
-  [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-</div>
+Plataforma de e-commerce moderna para venta de zapatillas deportivas, desarrollada con React, Node.js y Supabase.
 
 ---
 
 ## 📋 Tabla de Contenidos
 
-- [Descripción](#-descripción)
 - [Características](#-características)
 - [Tecnologías](#-tecnologías)
-- [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Requisitos Previos](#-requisitos-previos)
 - [Instalación](#-instalación)
-- [Uso](#-uso)
-- [Funcionalidades Principales](#-funcionalidades-principales)
-- [Páginas](#-páginas)
-- [Componentes](#-componentes)
 - [Configuración](#-configuración)
-- [Capturas de Pantalla](#-capturas-de-pantalla)
-- [Contribuir](#-contribuir)
-- [Licencia](#-licencia)
-
----
-
-## 🎯 Descripción
-
-**SPORTA** es una aplicación web moderna de e-commerce especializada en equipamiento deportivo de alto rendimiento. Diseñada con React y Vite, ofrece una experiencia de usuario fluida y atractiva para atletas que buscan productos premium.
-
-La plataforma incluye un sistema completo de autenticación, carrito de compras, checkout con múltiples métodos de pago, y generación automática de comprobantes.
+- [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Base de Datos](#-base-de-datos)
+- [API Endpoints](#-api-endpoints)
+- [Funcionalidades](#-funcionalidades)
+- [Credenciales](#-credenciales)
+- [Scripts Disponibles](#-scripts-disponibles)
 
 ---
 
 ## ✨ Características
 
-### 🛒 E-commerce Completo
-- **Catálogo de productos** con filtros por categoría, búsqueda y ordenamiento
-- **Carrito de compras** interactivo con gestión de cantidades
-- **Sistema de checkout** con múltiples métodos de pago
-- **Generación automática de comprobantes** descargables
+### Para Clientes
+- 🛍️ Catálogo de productos con filtros por categoría
+- 🔍 Búsqueda y visualización detallada de productos
+- 🛒 Carrito de compras persistente en base de datos
+- 👤 Autenticación con email/password y Google OAuth
+- 📦 Sistema de checkout con múltiples métodos de pago
+- 📍 Gestión de direcciones de envío
+- 📧 Formulario de contacto integrado
+- 🎨 Diseño moderno y responsivo
 
-### 🔐 Autenticación
-- Sistema de login y registro de usuarios
-- Validación de formularios en tiempo real
-- Protección de rutas (productos requieren autenticación)
-- Integración con Google OAuth (UI preparada)
-
-### 💳 Métodos de Pago
-- Tarjeta de crédito/débito
-- Yape / Plin (billeteras digitales)
-- Transferencia bancaria
-- Pago contra entrega
-
-### 📧 Integración con Formspree
-- Envío automático de pedidos por email
-- Formulario de contacto funcional
-- Notificaciones de compra
-
-### 🎨 Diseño Moderno
-- Interfaz dark mode con acentos en naranja (#FF4500)
-- Animaciones y transiciones suaves
-- Diseño responsive para todos los dispositivos
-- Tipografía personalizada (Bebas Neue + DM Sans)
+### Para Administradores
+- 📊 Dashboard con estadísticas en tiempo real
+- 👥 Gestión de usuarios (bloquear/desbloquear)
+- 📦 Gestión completa de productos (CRUD)
+- 🛍️ Gestión de pedidos y estados
+- 📈 Gráficos de ventas (Chart.js)
+- 📊 Reportes exportables (CSV)
+- 🔐 Panel de administración protegido
 
 ---
 
-## � Tecnologías
+## 🛠️ Tecnologías
 
 ### Frontend
-- **React 19.1.1** - Biblioteca de UI
-- **Vite 7.1.7** - Build tool y dev server
-- **React Router DOM 7.9.3** - Navegación SPA
+- **React 18** - Biblioteca de UI
+- **Vite** - Build tool y dev server
+- **Lucide React** - Iconos
+- **Chart.js** - Gráficos y estadísticas
+- **Google OAuth** - Autenticación social
+- **Formspree** - Respaldo de formularios
 
-### Estilos
-- **TailwindCSS 4.2.4** - Framework CSS utility-first
-- **CSS-in-JS** - Estilos inline para componentes específicos
-- **Framer Motion 12.23.22** - Animaciones
+### Backend
+- **Node.js** - Runtime de JavaScript
+- **Express** - Framework web
+- **Supabase** - Base de datos PostgreSQL
+- **JWT** - Autenticación con tokens
+- **bcrypt** - Hash de contraseñas
+- **CORS** - Manejo de peticiones cross-origin
 
-### Formularios
-- **@formspree/react 3.0.0** - Manejo de formularios
+### Base de Datos
+- **PostgreSQL** (via Supabase)
+- **Row Level Security (RLS)**
+- **Triggers automáticos**
+- **Índices optimizados**
 
-### Iconos
-- **Lucide React 0.545.0** - Biblioteca de iconos
+---
 
-### Herramientas de Desarrollo
-- **ESLint 9.36.0** - Linter de código
-- **@vitejs/plugin-react 5.0.4** - Plugin de React para Vite
+## 📦 Requisitos Previos
+
+- **Node.js** 16+ y npm
+- **Cuenta de Supabase** (gratuita)
+- **Cuenta de Google Cloud** (para OAuth)
+- **Cuenta de Formspree** (opcional, para respaldo de formularios)
+
+---
+
+## 🚀 Instalación
+
+### 1. Clonar el repositorio
+```bash
+git clone <repository-url>
+cd Sporta-Ecommerce-Platform-
+```
+
+### 2. Instalar dependencias del backend
+```bash
+cd backend
+npm install
+```
+
+### 3. Instalar dependencias del frontend
+```bash
+cd ../frontend
+npm install
+```
+
+---
+
+## ⚙️ Configuración
+
+### 1. Configurar Supabase
+
+#### a) Crear proyecto en Supabase
+1. Ve a [supabase.com](https://supabase.com)
+2. Crea un nuevo proyecto
+3. Guarda la URL y la API Key (anon/public)
+
+#### b) Ejecutar script SQL
+1. Ve a SQL Editor en Supabase
+2. Copia y pega el contenido de `backend/supabase_setup_complete.sql`
+3. Ejecuta el script completo
+4. Verifica que se crearon 8 tablas
+
+### 2. Configurar variables de entorno
+
+#### Backend (`backend/.env`)
+```env
+PORT=3001
+SUPABASE_URL=https://tu-proyecto.supabase.co
+SUPABASE_KEY=tu-supabase-anon-key
+JWT_SECRET=tu-secreto-jwt-super-seguro-cambiar-en-produccion
+```
+
+#### Frontend (`frontend/.env`)
+```env
+VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
+VITE_SUPABASE_ANON_KEY=tu-supabase-anon-key
+VITE_GOOGLE_CLIENT_ID=tu-google-client-id.apps.googleusercontent.com
+```
+
+### 3. Configurar Google OAuth (Opcional)
+
+1. Ve a [Google Cloud Console](https://console.cloud.google.com)
+2. Crea un nuevo proyecto
+3. Habilita Google+ API
+4. Crea credenciales OAuth 2.0
+5. Agrega orígenes autorizados:
+   - `http://localhost:5173` (desarrollo)
+   - Tu dominio de producción
+6. Copia el Client ID al archivo `.env` del frontend
+
+### 4. Configurar Formspree (Opcional)
+
+1. Ve a [formspree.io](https://formspree.io)
+2. Crea formularios para:
+   - Contacto: Actualiza el ID en `frontend/src/pages/Contact.jsx`
+   - Pedidos: Actualiza el ID en `backend/src/routes/orders.js`
 
 ---
 
 ## 📁 Estructura del Proyecto
 
 ```
-sporta/
-├── public/
-│   └── sporta.svg                 # Logo de la aplicación
-├── src/
-│   ├── assets/                    # Recursos estáticos
-│   │   ├── modelo1-5.png         # Imágenes de modelos
-│   │   ├── shoe1-6.jpg           # Imágenes de productos
-│   │   └── Sporta_BLACK-logo.png # Logo principal
-│   ├── components/                # Componentes reutilizables
-│   │   ├── Auth.jsx              # Modal de autenticación
-│   │   ├── Cart.jsx              # Panel lateral del carrito
-│   │   ├── Footer.jsx            # Pie de página
-│   │   ├── Hero.jsx              # Sección hero con carrusel
-│   │   ├── Navbar.jsx            # Barra de navegación
-│   │   ├── ProductCard.jsx       # Tarjeta de producto
-│   │   └── Stats.jsx             # Estadísticas de la empresa
-│   ├── pages/                     # Páginas principales
-│   │   ├── About.jsx             # Página sobre nosotros
-│   │   ├── Checkout.jsx          # Proceso de pago
-│   │   ├── Contact.jsx           # Formulario de contacto
-│   │   ├── Home.jsx              # Página de inicio
-│   │   ├── ProductDetail.jsx     # Detalle de producto
-│   │   └── Products.jsx          # Catálogo de productos
-│   ├── App.jsx                    # Componente principal
-│   ├── App.css                    # Estilos globales
-│   ├── main.jsx                   # Punto de entrada
-│   └── index.css                  # Estilos base
-├── .gitignore
-├── eslint.config.js               # Configuración de ESLint
-├── index.html                     # HTML principal
-├── package.json                   # Dependencias del proyecto
-├── package-lock.json
-├── README.md                      # Este archivo
-└── vite.config.js                 # Configuración de Vite
+Sporta-Ecommerce-Platform-/
+├── .git/                        # Control de versiones
+├── .vscode/                     # Configuración del editor
+├── .gitignore                   # Archivos ignorados por Git
+│
+├── backend/
+│   ├── src/
+│   │   ├── middleware/
+│   │   │   └── auth.js          # Middleware de autenticación JWT
+│   │   ├── routes/
+│   │   │   ├── admin.js         # Endpoints de administración
+│   │   │   ├── auth.js          # Autenticación y registro
+│   │   │   ├── cart.js          # Carrito de compras
+│   │   │   ├── contact.js       # Formulario de contacto
+│   │   │   ├── googleAuth.js    # Autenticación con Google
+│   │   │   ├── orders.js        # Gestión de pedidos
+│   │   │   └── products.js      # Catálogo de productos
+│   │   ├── db.js                # Conexión a Supabase
+│   │   └── index.js             # Servidor Express
+│   ├── .env                     # Variables de entorno
+│   ├── .env.example             # Ejemplo de variables
+│   ├── .gitignore               # Archivos ignorados
+│   ├── package.json             # Dependencias del backend
+│   ├── start.bat                # Script de inicio (Windows)
+│   ├── restart.bat              # Script de reinicio (Windows)
+│   └── supabase_setup_complete.sql  # Setup completo de BD
+│
+├── frontend/
+│   ├── public/
+│   │   ├── sporta.svg           # Logo
+│   │   └── SportaVideoPublicitario.mp4
+│   ├── src/
+│   │   ├── assets/              # Imágenes de productos
+│   │   │   ├── modelo1-5.png    # Imágenes de modelos
+│   │   │   ├── shoe1-6.jpg      # Imágenes de zapatillas
+│   │   │   └── Sporta_BLACK-logo.png
+│   │   ├── components/
+│   │   │   ├── AdminDashboard.jsx   # Panel de administración
+│   │   │   ├── Auth.jsx             # Modal de login/registro
+│   │   │   ├── Cart.jsx             # Carrito lateral
+│   │   │   ├── Footer.jsx           # Pie de página
+│   │   │   ├── Hero.jsx             # Banner principal
+│   │   │   ├── Navbar.jsx           # Barra de navegación
+│   │   │   ├── ProductCard.jsx      # Tarjeta de producto
+│   │   │   └── Stats.jsx            # Estadísticas
+│   │   ├── pages/
+│   │   │   ├── About.jsx            # Página Nosotros
+│   │   │   ├── Checkout.jsx         # Proceso de pago
+│   │   │   ├── Contact.jsx          # Formulario de contacto
+│   │   │   ├── Home.jsx             # Página principal
+│   │   │   ├── ProductDetail.jsx    # Detalle de producto
+│   │   │   └── Products.jsx         # Catálogo
+│   │   ├── api.js               # Cliente API
+│   │   ├── App.jsx              # Componente principal
+│   │   ├── App.css              # Estilos globales
+│   │   ├── index.css            # Estilos base
+│   │   └── main.jsx             # Punto de entrada
+│   ├── .env                     # Variables de entorno
+│   ├── .env.example             # Ejemplo de variables
+│   ├── eslint.config.js         # Configuración de ESLint
+│   ├── index.html               # HTML principal
+│   ├── package.json             # Dependencias del frontend
+│   ├── vite.config.js           # Configuración de Vite
+│   ├── GOOGLE_OAUTH_SETUP.md    # Guía de configuración OAuth
+│   └── README.md                # Documentación del frontend
+│
+└── README.md                    # Este archivo (documentación principal)
 ```
 
 ---
 
-## 🚀 Instalación
+## 🗄️ Base de Datos
 
-### Prerrequisitos
-- Node.js >= 18.0.0
-- npm >= 9.0.0 o yarn >= 1.22.0
+### Tablas Principales
 
-### Pasos
+#### `users`
+Usuarios del sistema (clientes y administradores)
+- `id`, `name`, `email`, `password`, `role`, `blocked`
+- `google_id`, `picture` (para OAuth)
+- `created_at`
 
-1. **Clonar el repositorio**
-```bash
-git clone https://github.com/tu-usuario/sporta.git
-cd sporta
-```
+#### `categories`
+Categorías de productos
+- `id`, `name`, `slug`, `description`
+- Valores: Running, Lifestyle, Basketball
 
-2. **Instalar dependencias**
-```bash
-npm install
-# o
-yarn install
-```
+#### `products`
+Catálogo de productos
+- `id`, `name`, `category`, `category_id`, `slug`
+- `price`, `stock`, `badge`, `description`, `image`
+- `sizes[]`, `colors[]`, `features[]`
+- `is_featured`, `status`
 
-3. **Configurar variables de entorno** (opcional)
-```bash
-# Crear archivo .env en la raíz
-VITE_FORMSPREE_ENDPOINT=tu_endpoint_de_formspree
-```
+#### `cart_items`
+Items del carrito de compras
+- `id`, `user_id`, `product_id`, `quantity`
+- `selected_size`, `selected_color`
 
-4. **Iniciar el servidor de desarrollo**
-```bash
-npm run dev
-# o
-yarn dev
-```
+#### `orders`
+Pedidos realizados
+- `id`, `user_id`, `name`, `email`, `phone`
+- `address`, `district`, `reference`, `delivery_notes`
+- `payment_method`, `subtotal`, `shipping`, `total`
+- `status` (pending, paid, shipped, cancelled)
 
-5. **Abrir en el navegador**
-```
-http://localhost:5173
-```
+#### `order_items`
+Items de cada pedido
+- `id`, `order_id`, `product_id`
+- `name`, `price`, `quantity`, `image`
+- `selected_size`, `selected_color`
 
----
+#### `contacts`
+Mensajes del formulario de contacto
+- `id`, `name`, `email`, `subject`, `message`
 
-## 💻 Uso
-
-### Comandos Disponibles
-
-```bash
-# Desarrollo
-npm run dev          # Inicia el servidor de desarrollo
-
-# Producción
-npm run build        # Genera build de producción
-npm run preview      # Previsualiza el build
-
-# Linting
-npm run lint         # Ejecuta ESLint
-```
-
-### Flujo de Usuario
-
-1. **Navegación**: Explora productos desde la página de inicio
-2. **Autenticación**: Inicia sesión o regístrate para comprar
-3. **Agregar al carrito**: Selecciona productos y agrégalos al carrito
-4. **Checkout**: Completa el formulario de envío y selecciona método de pago
-5. **Confirmación**: Recibe comprobante descargable y email de confirmación
+#### `addresses`
+Direcciones guardadas (opcional, no implementado aún)
+- `id`, `user_id`, `name`, `address`, `district`
+- `reference`, `phone`, `is_default`
 
 ---
 
-## 🎯 Funcionalidades Principales
+## 🔌 API Endpoints
 
-### 1. Sistema de Autenticación
-```jsx
-// Componente Auth.jsx
-- Login con email y contraseña
-- Registro de nuevos usuarios
-- Validación de formularios
-- Integración con Google (UI preparada)
-```
+### Autenticación (`/api/auth`)
+- `POST /register` - Registrar nuevo usuario
+- `POST /login` - Iniciar sesión
+- `POST /google` - Login con Google (usuarios existentes)
+- `POST /google/register` - Registro con Google
+- `GET /me` - Obtener usuario actual
 
-### 2. Carrito de Compras
-```jsx
-// Componente Cart.jsx
-- Agregar/eliminar productos
-- Actualizar cantidades
-- Cálculo automático de totales
-- Indicador de envío gratis (+S/150)
-- Persistencia en estado global
-```
+### Productos (`/api/products`)
+- `GET /` - Listar productos (con filtros)
+- `GET /:id` - Obtener producto por ID
 
-### 3. Proceso de Checkout
-```jsx
-// Página Checkout.jsx
-- Formulario de datos de envío
-- Selección de método de pago
-- Validación de datos de tarjeta
-- Generación de comprobante
-- Integración con Formspree
-```
+### Carrito (`/api/cart`)
+- `GET /` - Obtener carrito del usuario
+- `POST /` - Agregar producto al carrito
+- `PATCH /:id` - Actualizar cantidad
+- `DELETE /:id` - Eliminar item
+- `DELETE /` - Vaciar carrito
 
-### 4. Catálogo de Productos
-```jsx
-// Página Products.jsx
-- Búsqueda en tiempo real
-- Filtros por categoría
-- Ordenamiento (precio, nombre)
-- Vista de detalle de producto
-- Protección por autenticación
-```
+### Pedidos (`/api/orders`)
+- `POST /` - Crear nuevo pedido
+- `GET /` - Listar pedidos del usuario
+- `GET /:id` - Obtener pedido específico
 
----
+### Contacto (`/api/contact`)
+- `POST /` - Enviar mensaje de contacto
 
-## 📄 Páginas
+### Admin (`/api/admin`) 🔒
+Requiere autenticación y rol de administrador
 
-### Home (`/`)
-- Hero section con carrusel de productos destacados
-- Estadísticas de la empresa
-- Nuevos lanzamientos
-- Beneficios de la tienda
-- Call-to-action
+#### Estadísticas
+- `GET /stats` - Estadísticas generales
 
-### Products (`/products`)
-- Catálogo completo de productos
-- Barra de búsqueda
-- Filtros por categoría (Running, Lifestyle, Basketball)
-- Ordenamiento por precio y nombre
-- Requiere autenticación para ver productos
+#### Usuarios
+- `GET /users` - Listar usuarios
+- `PATCH /users/:id` - Actualizar usuario
+- `DELETE /users/:id` - Eliminar usuario
 
-### Product Detail (`/product/:id`)
-- Imágenes del producto
-- Descripción detallada
-- Características técnicas
-- Selector de talla y color
-- Selector de cantidad
-- Botón de agregar al carrito
+#### Productos
+- `POST /products` - Crear producto
+- `PATCH /products/:id` - Actualizar producto
+- `DELETE /products/:id` - Eliminar producto
 
-### About (`/about`)
-- Historia de la empresa
-- Misión y valores
-- Línea de tiempo
-- Estadísticas corporativas
-
-### Contact (`/contact`)
-- Formulario de contacto integrado con Formspree
-- Información de contacto
-- Horarios de atención
-- Enlaces a redes sociales
-
-### Checkout (`/checkout`)
-- Formulario de datos personales y envío
-- Resumen del pedido
-- Selección de método de pago
-- Confirmación y generación de comprobante
+#### Pedidos
+- `GET /orders` - Listar todos los pedidos
+- `PATCH /orders/:id` - Actualizar estado de pedido
 
 ---
 
-## � Componentes
+## 🎯 Funcionalidades
 
-### Navbar
-- Logo y navegación principal
-- Indicador de carrito con contador
-- Botón de login/registro
-- Menú de usuario autenticado
-
-### Hero
-- Carrusel automático de productos
-- Animaciones de entrada
-- Call-to-action principal
-- Tags de beneficios
-
-### ProductCard
-- Imagen del producto
-- Nombre y categoría
-- Precio
-- Badge de estado (Nuevo, Popular, etc.)
-- Botón de agregar al carrito
-
-### Cart (Panel lateral)
-- Lista de productos en el carrito
-- Controles de cantidad
-- Cálculo de subtotal y envío
-- Botón de checkout
-- Indicador de envío gratis
-
-### Auth (Modal)
-- Tabs de Login/Registro
-- Validación de formularios
-- Mensajes de error
-- Botón de Google OAuth
-
-### Footer
-- Enlaces de navegación
-- Información de contacto
-- Copyright
-
-### Stats
-- Tarjetas de estadísticas
-- Animaciones hover
-- Iconos decorativos
-
----
-
-## ⚙️ Configuración
-
-### Vite Config (`vite.config.js`)
-```javascript
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
-})
-```
-
-### ESLint Config (`eslint.config.js`)
-```javascript
-// Configuración de ESLint para React
-// Incluye reglas para hooks y refresh
-```
-
-### Formspree Integration
-El proyecto usa Formspree para el manejo de formularios:
-- **Contact Form**: Endpoint configurado en `Contact.jsx`
-- **Checkout Form**: Endpoint configurado en `Checkout.jsx`
-
-Para configurar tu propio endpoint:
-1. Crea una cuenta en [Formspree](https://formspree.io/)
-2. Crea un nuevo formulario
-3. Reemplaza el endpoint en los componentes
-
----
-
-## � Capturas de Pantalla
-
-### Página de Inicio
-![Home](./docs/screenshots/home.png)
-
-### Catálogo de Productos
-![Products](./docs/screenshots/products.png)
+### Sistema de Autenticación
+- Registro con email y contraseña
+- Login tradicional
+- Google OAuth (Sign in with Google)
+- Tokens JWT con expiración de 7 días
+- Protección de rutas privadas
 
 ### Carrito de Compras
-![Cart](./docs/screenshots/cart.png)
+- Persistencia en base de datos
+- Selección de talla y color
+- Actualización de cantidades
+- Cálculo automático de envío (gratis >S/150)
+- Sincronización entre sesiones
 
-### Checkout
-![Checkout](./docs/screenshots/checkout.png)
+### Sistema de Pedidos
+- Múltiples métodos de pago:
+  - Tarjeta de crédito/débito
+  - Yape/Plin
+  - Transferencia bancaria
+  - Contra entrega
+- Estados automáticos según método de pago
+- Generación de comprobantes
+- Notificaciones por email (Formspree)
 
----
-
-## 🤝 Contribuir
-
-Las contribuciones son bienvenidas. Para contribuir:
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-### Guía de Estilo
-- Usa componentes funcionales con hooks
-- Sigue las convenciones de nombres de React
-- Documenta funciones complejas
-- Mantén los componentes pequeños y reutilizables
-
----
-
-## � Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
----
-
-## � Autores
-
-- **Tu Nombre** - *Desarrollo inicial* - [tu-usuario](https://github.com/tu-usuario)
-
----
-
-## 🙏 Agradecimientos
-
-- Diseño inspirado en marcas deportivas líderes
-- Iconos de [Lucide](https://lucide.dev/)
-- Fuentes de [Google Fonts](https://fonts.google.com/)
-- Integración de formularios con [Formspree](https://formspree.io/)
+### Panel de Administración
+- Dashboard con métricas en tiempo real
+- Gráficos de ventas (Chart.js):
+  - Ventas por período (diario/mensual/anual)
+  - Distribución por categorías (gráfico de dona)
+- Gestión de usuarios:
+  - Ver lista completa
+  - Bloquear/desbloquear
+  - Ver historial de compras
+- Gestión de productos:
+  - Crear, editar, eliminar
+  - Subir imágenes (Supabase Storage)
+  - Control de stock
+- Gestión de pedidos:
+  - Ver todos los pedidos
+  - Cambiar estados
+  - Filtrar por estado
+- Reportes:
+  - Exportar a CSV
+  - Filtros por fecha
+  - Gráficos de tendencias
 
 ---
 
-## 📞 Contacto
+## 🔑 Credenciales
 
-- **Email**: hola@sporta.pe
-- **Teléfono**: +51 999 888 777
-- **Ubicación**: Lima, Perú
+### Usuario Administrador
+```
+Email: adminSporta@depor.pe
+Password: admin123
+```
+
+### Productos de Ejemplo
+El script SQL incluye 6 productos de ejemplo:
+1. Air Sprint Pro (Running) - S/449.99
+2. Urban Pulse NMD (Lifestyle) - S/399.99
+3. Classic Strike (Lifestyle) - S/349.99
+4. Court Force Low (Basketball) - S/379.99
+5. ZX Boost Radical (Running) - S/419.99
+6. Stan Legend (Lifestyle) - S/329.99
 
 ---
 
-<div align="center">
-  <p>Hecho con ❤️ para atletas que no aceptan límites</p>
-  <p>© 2025 SPORTA - Todos los derechos reservados</p>
-</div>
+## 📜 Scripts Disponibles
+
+### Backend
+```bash
+# Desarrollo (con nodemon)
+npm run dev
+
+# Producción
+npm start
+
+# Windows
+start.bat
+restart.bat
+```
+
+### Frontend
+```bash
+# Desarrollo
+npm run dev
+
+# Build para producción
+npm run build
+
+# Preview del build
+npm run preview
+
+# Linting
+npm run lint
+```
+
+---
+
+## 🚦 Flujo de Estados de Pedidos
+
+```
+pending → paid → shipped
+   ↓
+cancelled
+```
+
+### Estados Automáticos
+- **Tarjeta/Yape**: `paid` (pago inmediato)
+- **Transferencia/Efectivo**: `pending` (requiere verificación)
+
+### Cambios Manuales (Admin)
+- `pending` → `paid` (verificar pago)
+- `paid` → `shipped` (enviar pedido)
+- Cualquier estado → `cancelled` (cancelar)
+
+---
+
+## 🔒 Seguridad
+
+- Contraseñas hasheadas con bcrypt (10 rounds)
+- Tokens JWT con expiración
+- Row Level Security (RLS) en Supabase
+- Validación de datos en backend
+- Protección contra inyección SQL
+- CORS configurado
+- Variables de entorno para secretos
+- Protección contra doble envío de pedidos
+
+---
+
+## 🌐 Despliegue
+
+### Backend
+Recomendado: Railway, Render, o Heroku
+1. Configurar variables de entorno
+2. Instalar dependencias
+3. Ejecutar `npm start`
+
+### Frontend
+Recomendado: Vercel, Netlify, o Cloudflare Pages
+1. Build: `npm run build`
+2. Directorio: `dist`
+3. Configurar variables de entorno
+
+### Base de Datos
+Ya está en Supabase (cloud)
+
+---
+
+## 📝 Notas Importantes
+
+1. **Carrito**: Se guarda en `cart_items` (base de datos), NO en localStorage
+2. **Imágenes**: Actualmente usan rutas locales. Para producción, subir a Supabase Storage
+3. **Formspree**: Opcional, el sistema funciona sin él
+4. **Google OAuth**: Opcional, el sistema funciona con email/password
+5. **Tabla addresses**: Existe pero no está implementada (funcionalidad futura)
+
+---
+
+## 🐛 Solución de Problemas
+
+### Error: "Failed to resolve import @supabase/supabase-js"
+```bash
+cd frontend
+npm install @supabase/supabase-js
+```
+
+### Error: "401 Unauthorized" en login
+- Verificar que el usuario admin existe en la BD
+- Ejecutar `backend/supabase_setup_complete.sql` completo
+
+### Pedidos duplicados
+- Protección implementada contra doble clic
+- Si hay duplicados, usar script de limpieza en SQL Editor
+
+### Carrito no persiste
+- Verificar que la tabla `cart_items` existe
+- Verificar que las columnas `selected_size` y `selected_color` existen
+
+---
+
+## 📧 Contacto
+
+Para soporte o consultas sobre el proyecto:
+- Email: adminSporta@depor.pe
+- Teléfono: +51 925 841 052
+
+---
+
+## 📄 Licencia
+
+Este proyecto es privado y confidencial.
+
+---
+
+**Desarrollado con ❤️ para SPORTA**

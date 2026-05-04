@@ -54,6 +54,7 @@ app.get('/api/health', (_, res) => res.json({
   timestamp: new Date().toISOString(),
   routes: [
     'GET  /api/health',
+    'GET  /api/test-email',
     'POST /api/auth/register',
     'POST /api/auth/login',
     'GET  /api/auth/me',
@@ -65,6 +66,53 @@ app.get('/api/health', (_, res) => res.json({
     'GET  /api/admin/stats'
   ]
 }))
+
+// Test email endpoint
+app.get('/api/test-email', async (req, res) => {
+  try {
+    const { sendOrderConfirmationEmail } = await import('./services/emailService.js')
+    
+    const testData = {
+      receiptNumber: 'TEST-' + Date.now(),
+      orderId: 999,
+      name: 'Cliente Prueba',
+      email: req.query.email || 'valentinocuen123@gmail.com',
+      phone: '+51 999 888 777',
+      address: 'Av. Test 123',
+      district: 'Miraflores',
+      reference: 'Frente al parque',
+      deliveryNotes: 'Timbre azul',
+      paymentMethod: 'credit',
+      items: [
+        {
+          name: 'Zapatilla Test',
+          price: 100,
+          quantity: 1,
+          selectedSize: '42',
+          selectedColor: 'Negro'
+        }
+      ],
+      subtotal: 100,
+      shipping: 0,
+      total: 100,
+      orderDate: new Date().toLocaleString('es-PE')
+    }
+    
+    console.log('🧪 Enviando email de prueba a:', testData.email)
+    const result = await sendOrderConfirmationEmail(testData)
+    
+    res.json({
+      success: result.success,
+      provider: result.provider,
+      messageId: result.messageId,
+      error: result.error,
+      testEmail: testData.email
+    })
+  } catch (error) {
+    console.error('Error en test-email:', error)
+    res.status(500).json({ error: error.message, stack: error.stack })
+  }
+})
 
 // Root endpoint
 app.get('/', (_, res) => res.json({ 

@@ -1,11 +1,20 @@
 import pkg from 'nodemailer'
 import sgMail from '@sendgrid/mail'
+import * as brevo from '@getbrevo/brevo'
 const { createTransport } = pkg
 
 // Inicializar SendGrid
 if (process.env.SENDGRID_API_KEY) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
   console.log('✅ SendGrid configurado')
+}
+
+// Inicializar Brevo
+let brevoApi = null
+if (process.env.BREVO_API_KEY) {
+  brevoApi = new brevo.TransactionalEmailsApi()
+  brevoApi.setApiKey(brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY)
+  console.log('✅ Brevo configurado')
 }
 
 // Crear transportador de Gmail
@@ -281,7 +290,27 @@ const generateReceiptHTML = (orderData) => {
 // Enviar email de confirmación de pedido
 export const sendOrderConfirmationEmail = async (orderData) => {
   try {
-    // Intentar primero con SendGrid si está configurado
+    // Intentar primero con Brevo si está configurado
+    if (brevoApi && process.env.BREVO_FROM_EMAIL) {
+      console.log('📧 Enviando email con Brevo a:', orderData.email)
+      
+      try {
+        const sendSmtpEmail = new brevo.SendSmtpEmail()
+        sendSmtpEmail.sender = { email: process.env.BREVO_FROM_EMAIL, name: 'SPORTA' }
+        sendSmtpEmail.to = [{ email: orderData.email }]
+        sendSmtpEmail.subject = `✅ Pedido Confirmado #${orderData.orderId} - SPORTA`
+        sendSmtpEmail.htmlContent = generateReceiptHTML(orderData)
+
+        const response = await brevoApi.sendTransacEmail(sendSmtpEmail)
+        console.log('✅ Email enviado exitosamente con Brevo')
+        return { success: true, messageId: response.messageId, provider: 'brevo' }
+      } catch (brevoError) {
+        console.error('❌ Brevo falló:', brevoError.message)
+        // Continuar con SendGrid si Brevo falla
+      }
+    }
+
+    // Intentar con SendGrid si Brevo falla o no está configurado
     if (process.env.SENDGRID_API_KEY && process.env.SENDGRID_FROM_EMAIL) {
       console.log('📧 Enviando email con SendGrid a:', orderData.email)
       
@@ -298,11 +327,11 @@ export const sendOrderConfirmationEmail = async (orderData) => {
         return { success: true, messageId: response[0].headers['x-message-id'], provider: 'sendgrid' }
       } catch (sendgridError) {
         console.error('❌ SendGrid falló:', sendgridError.message)
-        return { success: false, error: sendgridError.message, provider: 'sendgrid' }
+        // Continuar con Gmail si SendGrid falla
       }
     }
 
-    // Intentar con Gmail si SendGrid no está configurado
+    // Intentar con Gmail como último recurso
     const gmailTransporter = createGmailTransporter()
     
     if (gmailTransporter) {

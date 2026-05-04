@@ -1,10 +1,6 @@
-import { Resend } from 'resend'
 import pkg from 'nodemailer'
 import sgMail from '@sendgrid/mail'
 const { createTransport } = pkg
-
-// Inicializar Resend con la API key
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 // Inicializar SendGrid
 if (process.env.SENDGRID_API_KEY) {
@@ -301,12 +297,12 @@ export const sendOrderConfirmationEmail = async (orderData) => {
         console.log('✅ Email enviado exitosamente con SendGrid')
         return { success: true, messageId: response[0].headers['x-message-id'], provider: 'sendgrid' }
       } catch (sendgridError) {
-        console.warn('⚠️ SendGrid falló:', sendgridError.message)
-        // Continuar con Gmail si SendGrid falla
+        console.error('❌ SendGrid falló:', sendgridError.message)
+        return { success: false, error: sendgridError.message, provider: 'sendgrid' }
       }
     }
 
-    // Intentar con Gmail si SendGrid falla o no está configurado
+    // Intentar con Gmail si SendGrid no está configurado
     const gmailTransporter = createGmailTransporter()
     
     if (gmailTransporter) {
@@ -330,33 +326,14 @@ export const sendOrderConfirmationEmail = async (orderData) => {
         console.log('✅ Email enviado exitosamente con Gmail. ID:', info.messageId)
         return { success: true, messageId: info.messageId, provider: 'gmail' }
       } catch (gmailError) {
-        console.warn('⚠️ Gmail falló:', gmailError.message)
-        // Continuar con Resend si Gmail falla
+        console.error('❌ Gmail falló:', gmailError.message)
+        return { success: false, error: gmailError.message, provider: 'gmail' }
       }
     }
     
-    // Si SendGrid y Gmail fallan, intentar con Resend
-    if (!process.env.RESEND_API_KEY) {
-      console.warn('⚠️ Ningún servicio de email está configurado. Email no enviado.')
-      return { success: false, error: 'No email service configured' }
-    }
-
-    console.log('📧 Enviando email con Resend a:', orderData.email)
-
-    const { data, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'SPORTA <onboarding@resend.dev>',
-      to: orderData.email,
-      subject: `✅ Pedido Confirmado #${orderData.orderId} - SPORTA`,
-      html: generateReceiptHTML(orderData)
-    })
-
-    if (error) {
-      console.error('❌ Error enviando email con Resend:', error)
-      return { success: false, error: error.message, provider: 'resend' }
-    }
-
-    console.log('✅ Email enviado exitosamente con Resend. ID:', data.id)
-    return { success: true, messageId: data.id, provider: 'resend' }
+    // Si ninguno está configurado
+    console.error('❌ Ningún servicio de email está configurado')
+    return { success: false, error: 'No email service configured' }
 
   } catch (error) {
     console.error('❌ Error en sendOrderConfirmationEmail:', error.message)

@@ -12,6 +12,7 @@ import Cart from './components/Cart'
 import Auth from './components/Auth'
 import Checkout from './pages/Checkout'
 import AdminDashboard from './components/AdminDashboard'
+import WhatsAppButton from './components/WhatsAppButton'
 import { api } from './api'
 
 function App() {
@@ -270,6 +271,9 @@ function App() {
           onRegister={handleRegister}
         />
       )}
+
+      {/* Botón flotante de WhatsApp */}
+      <WhatsAppButton />
     </div>
   )
 }

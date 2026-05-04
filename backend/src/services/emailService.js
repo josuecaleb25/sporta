@@ -305,31 +305,9 @@ const generateReceiptHTML = (orderData) => {
 // Enviar email de confirmación de pedido
 export const sendOrderConfirmationEmail = async (orderData) => {
   try {
-    // Intentar primero con Brevo si está configurado
-    const brevoTransporter = createBrevoTransporter()
-    
-    if (brevoTransporter) {
-      console.log('📧 Enviando email con Brevo a:', orderData.email)
-      
-      try {
-        const info = await brevoTransporter.sendMail({
-          from: `"SPORTA" <${process.env.BREVO_FROM_EMAIL}>`,
-          to: orderData.email,
-          subject: `✅ Pedido Confirmado #${orderData.orderId} - SPORTA`,
-          html: generateReceiptHTML(orderData)
-        })
-        
-        console.log('✅ Email enviado exitosamente con Brevo. ID:', info.messageId)
-        return { success: true, messageId: info.messageId, provider: 'brevo' }
-      } catch (brevoError) {
-        console.error('❌ Brevo falló:', brevoError.message)
-        // Continuar con SendGrid si Brevo falla
-      }
-    }
-
-    // Intentar con SendGrid si Brevo falla o no está configurado
+    // 1️⃣ INTENTAR PRIMERO CON SENDGRID
     if (process.env.SENDGRID_API_KEY && process.env.SENDGRID_FROM_EMAIL) {
-      console.log('📧 Enviando email con SendGrid a:', orderData.email)
+      console.log('📧 [1/3] Intentando enviar con SendGrid a:', orderData.email)
       
       try {
         const msg = {
@@ -343,43 +321,43 @@ export const sendOrderConfirmationEmail = async (orderData) => {
         console.log('✅ Email enviado exitosamente con SendGrid')
         return { success: true, messageId: response[0].headers['x-message-id'], provider: 'sendgrid' }
       } catch (sendgridError) {
-        console.error('❌ SendGrid falló:', sendgridError.message)
-        // Continuar con Gmail si SendGrid falla
+        console.warn('⚠️ SendGrid falló:', sendgridError.message)
+        // Continuar con Brevo
       }
     }
 
-    // Intentar con Gmail como último recurso
-    const gmailTransporter = createGmailTransporter()
+    // 2️⃣ INTENTAR CON BREVO SI SENDGRID FALLA
+    const brevoTransporter = createBrevoTransporter()
     
-    if (gmailTransporter) {
-      console.log('📧 Enviando email con Gmail a:', orderData.email)
+    if (brevoTransporter) {
+      console.log('📧 [2/3] Intentando enviar con Brevo a:', orderData.email)
       
       try {
-        // Agregar timeout de 10 segundos
-        const emailPromise = gmailTransporter.sendMail({
-          from: process.env.GMAIL_FROM || `"SPORTA" <${process.env.GMAIL_USER}>`,
+        const info = await brevoTransporter.sendMail({
+          from: `"SPORTA" <${process.env.BREVO_FROM_EMAIL}>`,
           to: orderData.email,
           subject: `✅ Pedido Confirmado #${orderData.orderId} - SPORTA`,
           html: generateReceiptHTML(orderData)
         })
-
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Gmail timeout después de 10 segundos')), 10000)
-        )
-
-        const info = await Promise.race([emailPromise, timeoutPromise])
         
-        console.log('✅ Email enviado exitosamente con Gmail. ID:', info.messageId)
-        return { success: true, messageId: info.messageId, provider: 'gmail' }
-      } catch (gmailError) {
-        console.error('❌ Gmail falló:', gmailError.message)
-        return { success: false, error: gmailError.message, provider: 'gmail' }
+        console.log('✅ Email enviado exitosamente con Brevo. ID:', info.messageId)
+        return { success: true, messageId: info.messageId, provider: 'brevo' }
+      } catch (brevoError) {
+        console.warn('⚠️ Brevo falló:', brevoError.message)
+        // Continuar con Formspree
       }
     }
+
+    // 3️⃣ USAR FORMSPREE COMO ÚLTIMO RECURSO
+    console.log('📧 [3/3] Intentando enviar con Formspree (respaldo final)')
+    console.warn('⚠️ Nota: Formspree no envía el comprobante HTML, solo notifica al admin')
     
-    // Si ninguno está configurado
-    console.error('❌ Ningún servicio de email está configurado')
-    return { success: false, error: 'No email service configured' }
+    // Formspree se maneja en orders.js, aquí solo retornamos que falló el email
+    return { 
+      success: false, 
+      error: 'SendGrid y Brevo fallaron, usando Formspree como respaldo',
+      provider: 'formspree-fallback'
+    }
 
   } catch (error) {
     console.error('❌ Error en sendOrderConfirmationEmail:', error.message)

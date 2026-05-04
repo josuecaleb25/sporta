@@ -285,12 +285,19 @@ export const sendOrderConfirmationEmail = async (orderData) => {
       console.log('📧 Enviando email con Gmail a:', orderData.email)
       
       try {
-        const info = await gmailTransporter.sendMail({
+        // Agregar timeout de 10 segundos
+        const emailPromise = gmailTransporter.sendMail({
           from: process.env.GMAIL_FROM || `"SPORTA" <${process.env.GMAIL_USER}>`,
           to: orderData.email,
           subject: `✅ Pedido Confirmado #${orderData.orderId} - SPORTA`,
           html: generateReceiptHTML(orderData)
         })
+
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Gmail timeout después de 10 segundos')), 10000)
+        )
+
+        const info = await Promise.race([emailPromise, timeoutPromise])
         
         console.log('✅ Email enviado exitosamente con Gmail. ID:', info.messageId)
         return { success: true, messageId: info.messageId, provider: 'gmail' }

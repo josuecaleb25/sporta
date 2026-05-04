@@ -1,6 +1,6 @@
 import pkg from 'nodemailer'
 import sgMail from '@sendgrid/mail'
-import brevo from '@getbrevo/brevo'
+import * as brevo from '@getbrevo/brevo'
 const { createTransport } = pkg
 
 // Inicializar SendGrid

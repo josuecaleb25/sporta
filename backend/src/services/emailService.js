@@ -302,10 +302,20 @@ const generateReceiptHTML = (orderData) => {
   `
 }
 
+// Helper: Timeout para promesas
+const withTimeout = (promise, timeoutMs, serviceName) => {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => 
+      setTimeout(() => reject(new Error(`${serviceName} timeout después de ${timeoutMs/1000}s`)), timeoutMs)
+    )
+  ])
+}
+
 // Enviar email de confirmación de pedido
 export const sendOrderConfirmationEmail = async (orderData) => {
   try {
-    // 1️⃣ INTENTAR PRIMERO CON SENDGRID
+    // 1️⃣ INTENTAR PRIMERO CON SENDGRID (timeout 5s - más rápido)
     if (process.env.SENDGRID_API_KEY && process.env.SENDGRID_FROM_EMAIL) {
       console.log('📧 [1/3] Intentando enviar con SendGrid a:', orderData.email)
       
@@ -317,29 +327,32 @@ export const sendOrderConfirmationEmail = async (orderData) => {
           html: generateReceiptHTML(orderData)
         }
 
-        const response = await sgMail.send(msg)
+        const response = await withTimeout(sgMail.send(msg), 5000, 'SendGrid')
         console.log('✅ Email enviado exitosamente con SendGrid')
         return { success: true, messageId: response[0].headers['x-message-id'], provider: 'sendgrid' }
       } catch (sendgridError) {
         console.warn('⚠️ SendGrid falló:', sendgridError.message)
         // Continuar con Brevo
       }
+    } else {
+      console.log('⚠️ SendGrid no configurado (falta SENDGRID_API_KEY o SENDGRID_FROM_EMAIL)')
     }
 
-    // 2️⃣ INTENTAR CON BREVO SI SENDGRID FALLA
+    // 2️⃣ INTENTAR CON BREVO SI SENDGRID FALLA (timeout 8s - reducido)
     const brevoTransporter = createBrevoTransporter()
     
     if (brevoTransporter) {
       console.log('📧 [2/3] Intentando enviar con Brevo a:', orderData.email)
       
       try {
-        const info = await brevoTransporter.sendMail({
+        const sendPromise = brevoTransporter.sendMail({
           from: `"SPORTA" <${process.env.BREVO_FROM_EMAIL}>`,
           to: orderData.email,
           subject: `✅ Pedido Confirmado #${orderData.orderId} - SPORTA`,
           html: generateReceiptHTML(orderData)
         })
         
+        const info = await withTimeout(sendPromise, 8000, 'Brevo')
         console.log('✅ Email enviado exitosamente con Brevo. ID:', info.messageId)
         return { success: true, messageId: info.messageId, provider: 'brevo' }
       } catch (brevoError) {
@@ -349,7 +362,7 @@ export const sendOrderConfirmationEmail = async (orderData) => {
     }
 
     // 3️⃣ USAR FORMSPREE COMO ÚLTIMO RECURSO
-    console.log('📧 [3/3] Intentando enviar con Formspree (respaldo final)')
+    console.log('📧 [3/3] SendGrid y Brevo fallaron, Formspree se usa como respaldo en orders.js')
     console.warn('⚠️ Nota: Formspree no envía el comprobante HTML, solo notifica al admin')
     
     // Formspree se maneja en orders.js, aquí solo retornamos que falló el email

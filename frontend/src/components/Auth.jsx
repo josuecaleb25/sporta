@@ -58,6 +58,9 @@ const Auth = ({ onClose, onLogin, onRegister }) => {
         ? `${API_URL}/api/auth/google`           // LOGIN: solo usuarios existentes
         : `${API_URL}/api/auth/google/register`  // REGISTRO: crea usuarios nuevos
       
+      console.log('🔍 Estado isLogin:', isLogin)
+      console.log('🔍 Endpoint a usar:', endpoint)
+      
       // Enviar al backend para validar y registrar/login
       const result = await fetch(endpoint, {
         method: 'POST',

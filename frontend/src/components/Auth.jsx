@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // Email exclusivo del administrador
 const ADMIN_EMAIL = 'adminSporta@depor.pe'
@@ -13,6 +13,14 @@ const Auth = ({ onClose, onLogin, onRegister }) => {
   const [errors, setErrors] = useState({})
   const [googleLoading, setGoogleLoading] = useState(false)
   const [loading, setLoading] = useState(false)
+  
+  // Usar ref para mantener el valor actual de isLogin
+  const isLoginRef = useRef(isLogin)
+  
+  // Actualizar la ref cada vez que cambia isLogin
+  useEffect(() => {
+    isLoginRef.current = isLogin
+  }, [isLogin])
 
   // Inicializar Google Sign-In
   useEffect(() => {
@@ -53,12 +61,15 @@ const Auth = ({ onClose, onLogin, onRegister }) => {
       
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
       
+      // Usar el valor actual de isLogin desde la ref (no el valor capturado en el closure)
+      const currentIsLogin = isLoginRef.current
+      
       // Usar endpoint diferente según si es login o registro
-      const endpoint = isLogin 
+      const endpoint = currentIsLogin 
         ? `${API_URL}/api/auth/google`           // LOGIN: solo usuarios existentes
         : `${API_URL}/api/auth/google/register`  // REGISTRO: crea usuarios nuevos
       
-      console.log('🔍 Estado isLogin:', isLogin)
+      console.log('🔍 Estado isLogin:', currentIsLogin)
       console.log('🔍 Endpoint a usar:', endpoint)
       
       // Enviar al backend para validar y registrar/login

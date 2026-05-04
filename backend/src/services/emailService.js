@@ -1,6 +1,6 @@
 import pkg from 'nodemailer'
 import sgMail from '@sendgrid/mail'
-import * as brevo from '@getbrevo/brevo'
+import brevo from '@getbrevo/brevo'
 const { createTransport } = pkg
 
 // Inicializar SendGrid
@@ -12,8 +12,10 @@ if (process.env.SENDGRID_API_KEY) {
 // Inicializar Brevo
 let brevoApi = null
 if (process.env.BREVO_API_KEY) {
-  brevoApi = new brevo.TransactionalEmailsApi()
-  brevoApi.setApiKey(brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY)
+  const apiInstance = new brevo.TransactionalEmailsApi()
+  const apiKey = apiInstance.authentications['apiKey']
+  apiKey.apiKey = process.env.BREVO_API_KEY
+  brevoApi = apiInstance
   console.log('✅ Brevo configurado')
 }
 

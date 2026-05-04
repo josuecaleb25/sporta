@@ -1,6 +1,5 @@
 import pkg from 'nodemailer'
 import sgMail from '@sendgrid/mail'
-import * as brevo from '@getbrevo/brevo'
 const { createTransport } = pkg
 
 // Inicializar SendGrid
@@ -9,14 +8,28 @@ if (process.env.SENDGRID_API_KEY) {
   console.log('✅ SendGrid configurado')
 }
 
-// Inicializar Brevo
-let brevoApi = null
-if (process.env.BREVO_API_KEY) {
-  const apiInstance = new brevo.TransactionalEmailsApi()
-  const apiKey = apiInstance.authentications['apiKey']
-  apiKey.apiKey = process.env.BREVO_API_KEY
-  brevoApi = apiInstance
-  console.log('✅ Brevo configurado')
+// Crear transportador de Brevo (usando SMTP)
+const createBrevoTransporter = () => {
+  if (!process.env.BREVO_API_KEY || !process.env.BREVO_FROM_EMAIL) {
+    console.log('⚠️ Brevo no configurado (falta BREVO_API_KEY o BREVO_FROM_EMAIL)')
+    return null
+  }
+  
+  try {
+    console.log('✅ Creando transportador de Brevo...')
+    return createTransport({
+      host: 'smtp-relay.brevo.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.BREVO_FROM_EMAIL,
+        pass: process.env.BREVO_API_KEY
+      }
+    })
+  } catch (error) {
+    console.error('❌ Error creando transportador de Brevo:', error)
+    return null
+  }
 }
 
 // Crear transportador de Gmail
@@ -293,19 +306,21 @@ const generateReceiptHTML = (orderData) => {
 export const sendOrderConfirmationEmail = async (orderData) => {
   try {
     // Intentar primero con Brevo si está configurado
-    if (brevoApi && process.env.BREVO_FROM_EMAIL) {
+    const brevoTransporter = createBrevoTransporter()
+    
+    if (brevoTransporter) {
       console.log('📧 Enviando email con Brevo a:', orderData.email)
       
       try {
-        const sendSmtpEmail = new brevo.SendSmtpEmail()
-        sendSmtpEmail.sender = { email: process.env.BREVO_FROM_EMAIL, name: 'SPORTA' }
-        sendSmtpEmail.to = [{ email: orderData.email }]
-        sendSmtpEmail.subject = `✅ Pedido Confirmado #${orderData.orderId} - SPORTA`
-        sendSmtpEmail.htmlContent = generateReceiptHTML(orderData)
-
-        const response = await brevoApi.sendTransacEmail(sendSmtpEmail)
-        console.log('✅ Email enviado exitosamente con Brevo')
-        return { success: true, messageId: response.messageId, provider: 'brevo' }
+        const info = await brevoTransporter.sendMail({
+          from: `"SPORTA" <${process.env.BREVO_FROM_EMAIL}>`,
+          to: orderData.email,
+          subject: `✅ Pedido Confirmado #${orderData.orderId} - SPORTA`,
+          html: generateReceiptHTML(orderData)
+        })
+        
+        console.log('✅ Email enviado exitosamente con Brevo. ID:', info.messageId)
+        return { success: true, messageId: info.messageId, provider: 'brevo' }
       } catch (brevoError) {
         console.error('❌ Brevo falló:', brevoError.message)
         // Continuar con SendGrid si Brevo falla

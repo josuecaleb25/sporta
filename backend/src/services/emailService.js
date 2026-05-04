@@ -1,9 +1,16 @@
 import { Resend } from 'resend'
 import pkg from 'nodemailer'
+import sgMail from '@sendgrid/mail'
 const { createTransport } = pkg
 
 // Inicializar Resend con la API key
 const resend = new Resend(process.env.RESEND_API_KEY)
+
+// Inicializar SendGrid
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+  console.log('✅ SendGrid configurado')
+}
 
 // Crear transportador de Gmail
 const createGmailTransporter = () => {
@@ -278,7 +285,28 @@ const generateReceiptHTML = (orderData) => {
 // Enviar email de confirmación de pedido
 export const sendOrderConfirmationEmail = async (orderData) => {
   try {
-    // Intentar primero con Gmail si está configurado
+    // Intentar primero con SendGrid si está configurado
+    if (process.env.SENDGRID_API_KEY && process.env.SENDGRID_FROM_EMAIL) {
+      console.log('📧 Enviando email con SendGrid a:', orderData.email)
+      
+      try {
+        const msg = {
+          to: orderData.email,
+          from: process.env.SENDGRID_FROM_EMAIL,
+          subject: `✅ Pedido Confirmado #${orderData.orderId} - SPORTA`,
+          html: generateReceiptHTML(orderData)
+        }
+
+        const response = await sgMail.send(msg)
+        console.log('✅ Email enviado exitosamente con SendGrid')
+        return { success: true, messageId: response[0].headers['x-message-id'], provider: 'sendgrid' }
+      } catch (sendgridError) {
+        console.warn('⚠️ SendGrid falló:', sendgridError.message)
+        // Continuar con Gmail si SendGrid falla
+      }
+    }
+
+    // Intentar con Gmail si SendGrid falla o no está configurado
     const gmailTransporter = createGmailTransporter()
     
     if (gmailTransporter) {
@@ -307,9 +335,9 @@ export const sendOrderConfirmationEmail = async (orderData) => {
       }
     }
     
-    // Si Gmail no está configurado o falló, intentar con Resend
+    // Si SendGrid y Gmail fallan, intentar con Resend
     if (!process.env.RESEND_API_KEY) {
-      console.warn('⚠️ Ni Gmail ni Resend están configurados. Email no enviado.')
+      console.warn('⚠️ Ningún servicio de email está configurado. Email no enviado.')
       return { success: false, error: 'No email service configured' }
     }
 
